@@ -1,0 +1,255 @@
+import 'package:flutter/material.dart';
+
+class SettingScreen extends StatefulWidget {
+  @override
+  _SettingScreenState createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  String selectedDate = ''; // Used to store selected date
+
+  Future<void> _showChangePasswordBottomSheet() async {
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Color(0xfff222121),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Change Password',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Old Password',
+                  hintStyle: TextStyle(color: Colors.white70),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Handle forgot password
+                    },
+                    child: Text(
+                      'Forgot Password',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              TextField(
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'New Password',
+                  hintStyle: TextStyle(color: Colors.white70),
+                ),
+              ),
+              TextField(
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Repeat New Password',
+                  hintStyle: TextStyle(color: Colors.white70),
+                ),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle Save Password
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xffEF3651),
+                ),
+                child: Text('SAVE PASSWORD'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xff222121),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Handle search action
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        color: Color(0xfff222121),
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'SETTING',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Personal Information',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              style: TextStyle(color: Color(0xff636363)),
+              decoration: InputDecoration(
+                hintText: 'Full Name',
+                hintStyle: TextStyle(color: Colors.white),
+              ),
+              controller: TextEditingController(text: 'Matilda Brown'),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              style: TextStyle(color: Color(0xff636363)),
+              decoration: InputDecoration(
+                hintText: 'Date Of Birth',
+                hintStyle: TextStyle(color: Colors.white),
+              ),
+              onTap: () async {
+                DateTime picked = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                if (picked != null) {
+                  setState(() {
+                    selectedDate = picked.toString();
+                  });
+                }
+              },
+              controller: TextEditingController(text: selectedDate),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Password',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _showChangePasswordBottomSheet(); // Open the bottom sheet
+                  },
+                  child: Text(
+                    'change',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            TextField(
+              style: TextStyle(color: Color(0xff636363)),
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                hintStyle: TextStyle(color: Colors.white),
+              ),
+            ),
+            SizedBox(height: 20),
+            Image.asset('assets/setting.png'),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+  color: Colors.black,
+  child: TabBar(
+    indicatorColor: Color(0xffde5252),
+    tabs: [
+      Tab(icon: Icon(Icons.home)),
+      Tab(icon: Icon(Icons.shop)),
+      Tab(icon: Icon(Icons.shopping_bag)),
+      Tab(icon: Icon(Icons.favorite)),
+      Tab(icon: Icon(Icons.person)),
+    ],
+    onTap: (index) {
+      // Handle tab bar tap here
+      if (index == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainPage(),
+          ),
+        );
+        // Home tab
+      } else if (index == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryScreen(),
+          ),
+        );
+        // Shop tab
+      } else if (index == 2) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BagScreen(),
+          ),
+        );
+        // Bag tab
+      } else if (index == 3) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FavScreen(),
+          ),
+        );
+        // Favorite tab
+      } else if (index == 4) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfileScreen(),
+          ),
+        );
+        // Profile tab
+       
+      ),
+    );
+  }
+}
